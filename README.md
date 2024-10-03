@@ -1,24 +1,15 @@
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/template-addon)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/template-addon.svg)](https://vaadin.com/directory/component/template-addon)
-[![Build Status](https://jenkins.flowingcode.com/job/template-addon/badge/icon)](https://jenkins.flowingcode.com/job/template-addon)
-[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/template-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/template-addon)
-[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/template-addon)
+[![Build Status](https://jenkins.flowingcode.com/job/utils-addon/badge/icon)](https://jenkins.flowingcode.com/job/utils-addon)
+[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/addon-utils)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/addon-utils)
+[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/addon-utils)
 
-# Template Add-on
+# Add-on Utils
 
-This is a template project for building new Vaadin 24 add-ons
+Utilities for Vaadin add-ons.
 
 ## Features
 
-* List the features of your add-on in here
-
-## Online demo
-
-[Online demo here](http://addonsv24.flowingcode.com/template)
-
-## Download release
-
-[Available in Vaadin Directory](https://vaadin.com/directory/component/template-addon)
+* Check that the add-on package is [allowed](https://vaadin.com/docs/latest/integrations/spring/configuration/#configure-the-scanning-of-packages). In development mode, show a browser alert if it isn't allowed.
+* Compatible with Vaadin 14-24
 
 ### Maven install
 
@@ -27,7 +18,7 @@ Add the following dependencies in your pom.xml file:
 ```xml
 <dependency>
    <groupId>com.flowingcode.vaadin.addons</groupId>
-   <artifactId>template-addon</artifactId>
+   <artifactId>addon-utils</artifactId>
    <version>X.Y.Z</version>
 </dependency>
 ```
@@ -35,20 +26,13 @@ Add the following dependencies in your pom.xml file:
 
 Release versions are available from Maven Central repository. For SNAPSHOT versions see [here](https://maven.flowingcode.com/snapshots/).
 
-## Building and running demo
-
-- git clone repository
-- mvn clean install jetty:run
-
-To see the demo, navigate to http://localhost:8080/
-
 ## Release notes
 
-See [here](https://github.com/FlowingCode/TemplateAddon/releases)
+See [here](https://github.com/FlowingCode/AddonUtils/releases)
 
 ## Issue tracking
 
-The issues for this add-on are tracked on its github.com page. All bug reports and feature requests are appreciated. 
+The issues for this library are tracked on its github.com page. All bug reports and feature requests are appreciated. 
 
 ## Contributions
 
@@ -67,22 +51,37 @@ Then, follow these steps for creating a contribution:
 
 ## License & Author
 
-This add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
+This library is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-TEMPLATE_ADDON is written by Flowing Code S.A.
+AddonUtils is written by Flowing Code S.A.
 
 # Developer Guide
 
 ## Getting started
 
-Add your code samples in this section
+Check that `com.flowingcode.vaadin.addons.example` is included in the allowed-packages list. If missing, show an alert in the browser.
 
-## Special configuration when using Spring
+```
+package com.flowingcode.vaadin.addons.example;
 
-By default, Vaadin Flow only includes ```com/vaadin/flow/component``` to be always scanned for UI components and views. For this reason, the add-on might need to be allowed in order to display correctly. 
+public class MyComponent extends Div {
 
-To do so, just add ```com.flowingcode``` to the ```vaadin.allowed-packages``` property in ```src/main/resources/application.properties```, like:
+  public MyComponent() {
+    AllowedPackageChecker.check(this, MyComponent.class);
+  }
 
-```vaadin.allowed-packages = com.vaadin,org.vaadin,dev.hilla,com.flowingcode```
- 
-More information on Spring scanning configuration [here](https://vaadin.com/docs/latest/integrations/spring/configuration/#configure-the-scanning-of-packages).
+}
+```
+
+Check that `com.flowingcode.vaadin.addons.example` is included in the allowed-packages list. If missing, show an alert in the browser (the alert will reference `com.flowingcode.vaadin.addons`, i.e. the package name with one subpackage removed).
+```
+package com.flowingcode.vaadin.addons.example;
+
+public class MyComponent extends Div {
+
+  public MyComponent() {
+    AllowedPackageChecker.check(this, MyComponent.class, -1);
+  }
+
+}
+```
