@@ -73,14 +73,14 @@ public class MyComponent extends Div {
 }
 ```
 
-Check that `com.flowingcode.vaadin.addons.example` is included in the allowed-packages list. If missing, show an alert in the browser (the alert will reference `com.flowingcode.vaadin.addons`, i.e. the package name with one subpackage removed).
+Check that `com.flowingcode.vaadin.addons.example` is included in the allowed-packages list. If missing, show an alert in the browser (the alert will reference `com.flowingcode`).
 ```
 package com.flowingcode.vaadin.addons.example;
 
 public class MyComponent extends Div {
 
   public MyComponent() {
-    AllowedPackageChecker.check(this, MyComponent.class, -1);
+    AllowedPackageChecker.check(this, MyComponent.class, "com.flowingcode");
   }
 
 }

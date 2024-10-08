@@ -52,14 +52,13 @@ public class AllowedPackageChecker {
    * <p>
    * The check is performed only in development mode for Spring Boot applications that have an
    * allowed packages list. No check is done in production mode.
-   * <p>
-   * This method is equivalent to {@link #check(Component, String, int) check(component,type,0)}.
    *
    * @param component the component instance to be checked.
    * @param type the type of the component to be checked.
    */
   public static <T extends Component> void check(T component, Class<? super T> type) {
-    check(component, type, 0);
+    String componentPackageName = type.getPackage().getName();
+    check(component, type, componentPackageName);
   }
 
   /**
@@ -69,46 +68,30 @@ public class AllowedPackageChecker {
    * The check is performed only in development mode for Spring Boot applications that have an
    * allowed packages list. No check is done in production mode.
    * <p>
-   * When displaying the error message, {@code -removePackages} subpackages are removed from the
-   * package of {@code type}. For instance, if {@code type} is
-   * {@code com.flowingcode.vaadin.addons.utils} and {@code removePackages} is {@code -1}, the error
-   * will reference {@code com.flowingcode.vaadin.addons}.
+   * The error message will reference {@code packageName}.
    *
    * @param component the component instance to be checked.
    * @param type the type of the component to be checked.
-   * @param removePackages a negative number specifying how many subpackage levels to discard from
-   *        the type package when displaying the error message.
-   * @throws IllegalArgumentException if {@code removePackages} is positive, or if the package name
-   *         does not contain enough subpackages to remove the specified number of levels.
+   * @param packageName the package to report in the error message.
+   * @throws NullPointerException if any argument is {@code null}.
+   * @throws IllegalArgumentException if the component's package does not match or is not a
+   *         subpackage of {@code packageName}.
    */
-  public static <T extends Component> void check(T component, Class<? super T> type, int removePackages) {
-    if (removePackages > 0) {
+  public static <T extends Component> void check(T component, Class<? super T> type, String packageName) {
+    String componentPackageName = type.getPackage().getName();
+    if (!componentPackageName.equals(packageName) && !componentPackageName.startsWith(packageName + ".")) {
       throw new IllegalArgumentException();
     }
-    String packageName = type.getPackage().getName();
-    check(component, packageName, removePackages);
+    check(component, componentPackageName, packageName);
   }
 
-  private static void check(Component component, String packageName, int removePackages) {
+  private static void check(Component component, String componentPackageName,
+      String messagePackageName) {
     if (impl != null) {
-      // call removePackages before if in order to validate attribute
-      String messagePackageName = removePackages(packageName, removePackages);
-      if (!impl.isPackageAllowed(packageName)) {
+      if (!impl.isPackageAllowed(componentPackageName)) {
         component.getElement().executeJs(SCRIPT, messagePackageName);
       }
     }
-  }
-
-  private static String removePackages(String packageName, int removePackages) {
-    while (removePackages != 0) {
-      int pos = packageName.lastIndexOf('.');
-      if (pos < 0) {
-        throw new IllegalArgumentException();
-      }
-      packageName = packageName.substring(0, pos);
-      removePackages++;
-    }
-    return packageName;
   }
 
 }

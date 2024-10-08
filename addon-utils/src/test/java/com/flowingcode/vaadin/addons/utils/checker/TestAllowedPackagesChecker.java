@@ -50,27 +50,38 @@ public class TestAllowedPackagesChecker {
   }
 
   @Test
-  public void testCheckMinus1() {
+  public void testCheckPacakge() {
     var impl = Mockito.mock(AllowedPackages.class);
     var component = mockComponent();
     AllowedPackageChecker.setImpl(impl);
 
-    AllowedPackageChecker.check(component, Component.class, -1);
+    AllowedPackageChecker.check(component, Component.class);
+    verify(impl, times(1)).isPackageAllowed("com.vaadin.flow.component");
+    verify(component.getElement(), times(1)).executeJs(any(), eq("com.vaadin.flow.component"));
+  }
+
+  @Test
+  public void testCheckContainingPackage() {
+    var impl = Mockito.mock(AllowedPackages.class);
+    var component = mockComponent();
+    AllowedPackageChecker.setImpl(impl);
+
+    AllowedPackageChecker.check(component, Component.class, "com.vaadin.flow");
     verify(impl, times(1)).isPackageAllowed("com.vaadin.flow.component");
     verify(component.getElement(), times(1)).executeJs(any(),
         eq("com.vaadin.flow"));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testCheckMinus4() {
+  public void testIllegalArgument1() {
     var component = mockComponent();
-    AllowedPackageChecker.check(component, Component.class, -4);
+    AllowedPackageChecker.check(component, Component.class, "com.vaadin.flow.component.grid");
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testCheckPlus1() {
+  public void testIllegalArgument2() {
     var component = mockComponent();
-    AllowedPackageChecker.check(component, Component.class, +1);
+    AllowedPackageChecker.check(component, Component.class, "org.foo");
   }
 
 }
