@@ -1,4 +1,4 @@
-[![Build Status](https://jenkins.flowingcode.com/job/utils-addon/badge/icon)](https://jenkins.flowingcode.com/job/utils-addon)
+[![Build Status](https://jenkins.flowingcode.com/job/AddonUtils-addon/badge/icon)](https://jenkins.flowingcode.com/job/AddonUtils-addon)
 [![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/addon-utils)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/addon-utils)
 [![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/addon-utils)
 
